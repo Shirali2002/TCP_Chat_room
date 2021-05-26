@@ -16,6 +16,9 @@ class GUI:
         self.login.title("Login")
         self.login.configure(width=500, height=300)
 
+        self.icon_img = PhotoImage(file='icon_photo.png')
+        self.login.iconphoto(False, self.icon_img)
+
         self.msg_login = Label(self.login,
                                text='Please login nickname to continue',
                                justify=CENTER,
@@ -116,6 +119,8 @@ class GUI:
         self.window.configure(width=470,
                               height=550,
                               bg="#d6c7c7")
+
+        self.window.iconphoto(False, self.icon_img)
 
         self.label_top = Label(self.window,
                                bg='#2b4536',
