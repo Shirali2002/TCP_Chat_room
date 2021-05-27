@@ -3,6 +3,7 @@ import socket
 import threading
 from tkinter import *
 from tkinter import messagebox
+import sys
 
 
 # client's GUI class
@@ -51,6 +52,7 @@ class GUI:
                       rely=0.63)
 
         self.window.mainloop()
+        sys,exit(g.exec)
 
     # if client's nickname is admin, server have to check him password.
     # So client have to enter the password
@@ -251,3 +253,5 @@ client.connect(ADDRESS)
 # main
 if __name__ == '__main__':
     g = GUI()
+
+
