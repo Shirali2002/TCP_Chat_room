@@ -3,7 +3,7 @@ import socket
 import threading
 from tkinter import *
 from tkinter import messagebox
-import sys
+# import sys
 
 
 # client's GUI class
@@ -42,6 +42,7 @@ class GUI:
                               relx=0.22,
                               rely=0.25)
         self.entry_name.focus()
+        self.entry_name.bind('<Return>', lambda event: self.admin(self.entry_name.get()))
 
         self.go = Button(self.login,
                          text='LOGIN',
@@ -52,7 +53,6 @@ class GUI:
                       rely=0.63)
 
         self.window.mainloop()
-        sys,exit(g.exec)
 
     # if client's nickname is admin, server have to check him password.
     # So client have to enter the password
@@ -75,6 +75,8 @@ class GUI:
                                           relx=0.22,
                                           rely=0.43)
                 self.entry_password.focus()
+                self.entry_password.bind('<Return>', lambda event: self.admin_check(name, self.entry_password.get()))
+
                 self.go_as_admin = Button(self.login,
                                           text='LOGIN AS ADMIN',
                                           font='Helvetica 14 bold',
@@ -84,7 +86,11 @@ class GUI:
                                        rely=0.63)
             elif ctrl_pass == 'BAN':
                 messagebox.showwarning('warning', 'Connection refused because of ban! You have banned by admin.')
-                g.exit()
+                self.exit()
+
+            elif ctrl_pass == 'USED':
+                messagebox.showwarning('warning', 'The nick has used by other user.')
+                self.exit()
 
             else:
                 self.go_ahead(name)
@@ -100,7 +106,7 @@ class GUI:
         elif ctrl_accept == 'REFUSE':
             self.warning = messagebox.showwarning('warning', 'Password is incorrect. Please try again.')
             self.login.destroy()
-            g.exit()
+            self.exit()
 
     # It is the function to close login window and enter the chat window.
     def go_ahead(self, name):
@@ -167,6 +173,7 @@ class GUI:
                              rely=0.008,
                              relx=0.011)
         self.entry_msg.focus()
+        self.entry_msg.bind('<Return>', lambda event: self.send_button(self.entry_msg.get()))
 
         self.button_msg = Button(self.label_bottom,
                                  text="Send",
@@ -204,7 +211,7 @@ class GUI:
                 if message == 'PENALTY':
                     self.warning_kick = messagebox.showwarning('warning', 'You were kicked by an admin!')
                     self.window.destroy()
-                    g.exit()
+                    self.exit()
 
                 self.text_cons.config(state=NORMAL)
                 self.text_cons.insert(END,
@@ -216,7 +223,7 @@ class GUI:
                 messagebox.showerror('error', 'An error occured!')
                 # print('An error occured!')
                 self.window.destroy()
-                g.exit()
+                self.exit()
                 break
 
     # This is a function which send messages to the server when we click the send button.
@@ -236,8 +243,7 @@ class GUI:
                 client.send(message.encode(FORMAT))
             break
 
-    @staticmethod
-    def exit():
+    def exit(self):
         messagebox.showinfo('exit', 'Thank you for using our chat application politely.')
         quit()
 
