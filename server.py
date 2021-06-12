@@ -1,7 +1,7 @@
 # imports
 import socket
 import threading
-import time
+# import time
 
 
 # functions
@@ -18,6 +18,10 @@ def receive():
         if nickname+'\n' in bans:
             conn.send('BAN'.encode(FORMAT))
             conn.close()
+            continue
+
+        if nickname in nicknames:
+            conn.send('USED'.encode(FORMAT))
             continue
 
         if nickname == 'admin':
@@ -37,7 +41,7 @@ def receive():
 
         broadcast(f'{nickname} has joined chat!'.encode(FORMAT))
 
-        conn.send('Connection successful!'.encode(FORMAT))
+        conn.send('\n Connection successful!'.encode(FORMAT))
 
         thread = threading.Thread(target=handle, args=(conn,))
         thread.start()
@@ -89,7 +93,10 @@ def kick_user(name, cmd):
         # client_to_kick.close()
         client_to_kick.send('PENALTY'.encode(FORMAT))
         nicknames.remove(name)
-        broadcast(f'{name} was {cmd}ed by an admin!'.encode(FORMAT))
+        if cmd == 'ban':
+            broadcast(f'{name} was banned by an admin!'.encode(FORMAT))
+        elif cmd == 'kick':
+            broadcast(f'{name} was kicked by an admin!'.encode(FORMAT))
 
 
 def broadcast(message):
